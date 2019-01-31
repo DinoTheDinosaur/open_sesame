@@ -73,6 +73,8 @@ class GMM_Voice_Profile:
 		mfcc_of_voice = preprocessing.scale(mfcc_of_voice)
 
 		proba = self.__default_error/self.__gmm.score(mfcc_of_voice)
+		if proba > 1:
+			proba = 1
 		print(proba)
 
 
@@ -103,6 +105,8 @@ class Voice_Profile:
 		
 		error = count_error_square(mfcc_feat, self.__mean_features)
 		proba = self.__default_error/error
+		if proba > 1:
+			proba = 1
 		print(proba)
 
 class CNN_Voice_Profile:
@@ -110,14 +114,3 @@ class CNN_Voice_Profile:
 		pass
 	def predict(self, voice):
 		pass
-
-import glob
-
-audios = glob.glob("/home/somnoynadno/open_sesame/wav/Olya/s*.wav")
-
-prof = Voice_Profile()
-
-prof.fit(audios)
-
-f = prof.predict("/home/somnoynadno/open_sesame/example_audio/t3.wav")
-
