@@ -102,7 +102,7 @@ class Voice_Profile:
 		
 	def predict(self, mfcc_of_voice):
 		current_error = self._score(mfcc_of_voice)
-		
+
 		with open("Voice_Profiles.pickle", 'rb') as f:
 			voice_profiles = pickle.load(f)
 			for user in voice_profiles["Simple"]:
@@ -147,18 +147,19 @@ def add_user(nickname, mfcc_of_voice):
 	with open('Voice_Profiles.pickle', 'wb') as f:
 		pickle.dump(profiles, f)
 
-# return true if user doesn't exist in pickle
-def check_user(nickname):
+# return true if user exist in pickle
+def user_exist(nickname):
 	with open('Voice_Profiles.pickle', 'rb') as f:
 		profiles = pickle.load(f)
 		if nickname not in profiles.get("Simple") and nickname not in profiles.get("GMM") and nickname not in profiles.get("CNN"):
+			return False
+		else:
 			return True
-		return False
 
 def print_user_list():
 	with open('Voice_Profiles.pickle', 'rb') as f:
 		profiles = pickle.load(f)
-		print(profiles.get("Simple").keys())
+		print(profiles.get("GMM").keys())
 
 # take nickname and voice, return predictions
 def authorization(nickname, mfcc_of_voice):
@@ -168,5 +169,5 @@ def authorization(nickname, mfcc_of_voice):
 		profiles.get("Simple")[nickname].predict(mfcc_of_voice)
 
 		profiles.get("GMM")[nickname].predict(mfcc_of_voice)
-	
+		
 		# profiles.get("CNN")[nickname].predict(mfcc_of_voice)
