@@ -47,6 +47,10 @@ def take_mfcc(path):
 class GMM_Voice_Profile:
 	__gmm = None
 	__default_error = 0
+	__nickname = ""
+
+	def __init__(self, nickname):
+		self.__nickname = nickname
 
 	def fit(self, mfcc_of_voice):
 		mfcc_of_voice = preprocessing.scale(mfcc_of_voice)
@@ -56,11 +60,9 @@ class GMM_Voice_Profile:
 		self.__default_error = self.__gmm.score(mfcc_of_voice)
 
 	def _score(self, mfcc_of_voice):
-		assert __gmm
 		return self.__gmm.score(mfcc_of_voice)
 
 	def predict(self, mfcc_of_voice):
-		assert self.__default_error != 0
 		mfcc_of_voice = preprocessing.scale(mfcc_of_voice)
 		current_proba = self.__default_error/self.__gmm.score(mfcc_of_voice)
 
@@ -68,45 +70,51 @@ class GMM_Voice_Profile:
 			voice_profiles = pickle.load(f)
 			for user in voice_profiles["GMM"]:
 				user_GMM = voice_profiles["GMM"].get(user)
-				proba = self.__default_error/user_GMM._score(mfcc__of_voice)
+
+				if user == self.__nickname:
+					continue
+
+				proba = self.__default_error/user_GMM._score(mfcc_of_voice)
 				if proba > current_proba:
 					print("No")
-					break
+					return
 
 		print("Yes")
-		print(current_proba)
 
 class Voice_Profile:
 	__mean_features = list()
+	__nickname = ""
+
+	def __init__(self, nickname):
+		self.__nickname = nickname
 
 	def fit(self, mfcc_of_voice):
-		features = list()
 		mfcc_feat = mfcc2features(mfcc_of_voice)
 
-		features = np.array(features)
+		features = np.array(mfcc_feat)
 		features = features.transpose()
 
 		self.__mean_features = average_of_features(features)
 
 	def _score(self, mfcc_of_voice):
-		assert len(self.__mean_features)
-
 		mfcc_feat = mfcc2features(mfcc_of_voice)
 		return count_error_square(mfcc_feat, self.__mean_features)
 		
 	def predict(self, mfcc_of_voice):
-		assert len(self.__mean_features)
-		
 		current_error = self._score(mfcc_of_voice)
-
+		
 		with open("Voice_Profiles.pickle", 'rb') as f:
 			voice_profiles = pickle.load(f)
 			for user in voice_profiles["Simple"]:
 				user_Simple = voice_profiles["Simple"].get(user)
-				error = user_Simple._score(mfcc__of_voice)
+
+				if user == self.__nickname:
+					continue
+
+				error = user_Simple._score(mfcc_of_voice)
 				if error < current_error:
 					print("No")
-					break
+					return
 
 		print("Yes")
 		
@@ -127,13 +135,13 @@ def add_user(nickname, mfcc_of_voice):
 	with open('Voice_Profiles.pickle', 'rb') as f:
 		profiles = pickle.load(f)
 
-		profiles.get("Simple")[nickname] = Voice_Profile()
+		profiles.get("Simple")[nickname] = Voice_Profile(nickname)
 		profiles.get("Simple")[nickname].fit(mfcc_of_voice)
 
-		profiles.get("GMM")[nickname] = GMM_Voice_Profile()
+		profiles.get("GMM")[nickname] = GMM_Voice_Profile(nickname)
 		profiles.get("GMM")[nickname].fit(mfcc_of_voice)
 		
-		# profiles.get("CNN")[nickname] = GMM_Voice_Profile()
+		# profiles.get("CNN")[nickname] = GMM_Voice_Profile(nickname)
 		# profiles.get("CNN")[nickname].fit(mfcc_of_voice)
 
 	with open('Voice_Profiles.pickle', 'wb') as f:
@@ -150,6 +158,15 @@ def check_user(nickname):
 def print_user_list():
 	with open('Voice_Profiles.pickle', 'rb') as f:
 		profiles = pickle.load(f)
-		print(profiles.get("GMM").keys())
+		print(profiles.get("Simple").keys())
 
+# take nickname and voice, return predictions
+def authorization(nickname, mfcc_of_voice):
+	with open('Voice_Profiles.pickle', 'rb') as f:
+		profiles = pickle.load(f)
 
+		profiles.get("Simple")[nickname].predict(mfcc_of_voice)
+
+		profiles.get("GMM")[nickname].predict(mfcc_of_voice)
+	
+		# profiles.get("CNN")[nickname].predict(mfcc_of_voice)
