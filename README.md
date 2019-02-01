@@ -1,10 +1,10 @@
 # Biometric verification of a person by voice (Open Sesame).
------------------------------------------------------------------------------
+
 A Python module for speech authentification.
 The solution of this problem can find application safety of access to physical objects, information and financial resources. The important case of identification consist in definition of whether two signals belong to a voice of the same speaker. At verification the user shows the identifier in this or that look and the system of recognition should confirm or reject this identifier.
 
 # Installing
---
+
 To install this project on your local computer, you should copy the repository and install additional packages: 
 - wave
 - pyaudio
@@ -16,10 +16,10 @@ To install this project on your local computer, you should copy the repository a
 - 
 
 # Basic Usage
--------------------------------------------------------------------------------------
+
 
 # Contributors
--------------------------------------------------------------------------------------
+
  -  Zorkin Alexander 
  -  Baryshev Kirill
  - 
@@ -32,7 +32,7 @@ To install this project on your local computer, you should copy the repository a
 - Selezneva Darya
 
 # References
--------------------------------------------------------------------------------------
+
 1. https://appliedmachinelearning.blog/2017/06/14/voice-gender-detection-using-gmms-a-python-primer/ - Voice Gender Detection using GMMs : A Python Primer.
 2. https://appliedmachinelearning.blog/2017/11/14/spoken-speaker-identification-based-on-gaussian-mixture-models-python-implementation/ - Spoken Speaker Identification based on Gaussian Mixture Models : Python Implementation.
 3. https://basegroup.ru/community/articles/em - About ЕМ.
@@ -40,7 +40,7 @@ To install this project on your local computer, you should copy the repository a
 5. http://practicalcryptography.com/miscellaneous/machine-learning/guide-mel-frequency-cepstral-coefficients-mfccs/ - Mel Frequency Cepstral Coefficient (MFCC) tutorial.
 
 # Licence
--------------------------------------------------------------------------------------
+
 Copyright © 2019 Zorkin Alexander, Baryshev Kirill, 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
