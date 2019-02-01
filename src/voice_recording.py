@@ -35,5 +35,3 @@ def voice_rec(record_len):
     wavfile.close()
     os.remove("test.wav")
     return mfcc(signal_data, sampling_frequency)
-# record_len = int(input())
-# print(voice_rec(record_len).shape)
