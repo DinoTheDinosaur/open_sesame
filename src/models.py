@@ -5,9 +5,12 @@ import numpy as np
 
 from python_speech_features import mfcc
 import scipy.io.wavfile as wav
+from scipy import spatial
+from scipy.io import wavfile
 
 from sklearn.mixture import GaussianMixture
 from sklearn import preprocessing
+from keras.models import load_model
 
 # all classes take mfcc of audio as argument in fit()
 # all classes take mfcc as argument in predict()
@@ -118,11 +121,40 @@ class Voice_Profile:
 
 		print("Yes")
 		
+def wav_to_mfcc(filepath):
+    rate, sig = wavfile.read(filepath)
+    X = np.array(mfcc(sig, rate))
+    a, b = X.shape
+    X = X.reshape(1, a, b, 1)
+    return X
+
+
 class CNN_Voice_Profile:
-	def fit(self, voices):
-		pass
-	def predict(self, voice):
-		pass
+    def __init__(self):
+        self.vector =np.random.randint(0,1,(1,161)).astype(np.float_)
+
+
+    def fit(self, voices):
+        model_path = '../Model.h5'
+        model = load_model(model_path)
+        for i in voices:
+             Xnew = np.array(i)
+             ynew = model.predict(Xnew)
+
+        self.vector += ynew
+        pass
+
+    def predict(self, voice):
+        model_path = '../Model.h5'
+        model = load_model(model_path)
+        Xnew = np.array(voice)
+        ynew = model.predict(Xnew)
+        if(1- spatial.distance.cosine(ynew, self.vector))>0.75:
+            print("True")
+        else:
+            print("False")
+        print(1- spatial.distance.cosine(ynew, self.vector))
+        pass
 
 
 def create_empty_pickle():
