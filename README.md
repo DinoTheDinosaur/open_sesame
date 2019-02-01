@@ -13,7 +13,8 @@ To install this project on your local computer, you should copy the repository a
 - keras
 - sklearn
 - scipy
-- 
+- faker
+
 
 # Basic Usage
 
