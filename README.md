@@ -5,15 +5,11 @@ The solution of this problem can find application safety of access to physical o
 
 # Installing
 
-To install this project on your local computer, you should copy the repository and install additional packages: 
-- wave
-- pyaudio
-- numpy
-- python_speech_features
-- keras
-- sklearn
-- scipy
-- faker
+To install this project on your local computer, you should copy the repository and modules listed in requirements.txt. If you do not have them, run in Terminal: 
+
+```sh
+pip install -r requirements.txt
+```
 
 # Basic Usage
 
