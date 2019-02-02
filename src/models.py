@@ -170,4 +170,4 @@ def authorization(nickname, mfcc_of_voice):
 
 		profiles.get("GMM")[nickname].predict(mfcc_of_voice)
 		
-		# profiles.get("CNN")[nickname].predict(mfcc_of_voice)
+# profiles.get("CNN")[nickname].predict(mfcc_of_voice)
