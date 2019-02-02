@@ -10,7 +10,7 @@ from time import sleep
 def voice_rec(record_len):
     CHUNK = 1024
     FORMAT = pyaudio.paInt16
-    CHANNELS = 2
+    CHANNELS = 1
     RATE = 16000
     RECORD_SECONDS = record_len
     WAVE_OUTPUT_FILENAME = "test.wav"
