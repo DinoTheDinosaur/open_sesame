@@ -1,9 +1,11 @@
 import pyaudio
 import wave
 import os
+from faker import Faker
 from scipy.io import wavfile as wav
 from scipy import signal
 from python_speech_features import mfcc
+from time import sleep
 
 def voice_rec(record_len):
     CHUNK = 1024
@@ -18,7 +20,24 @@ def voice_rec(record_len):
                 rate=RATE,
                 input=True,
                 frames_per_buffer=CHUNK)
-    print(f"recording...")
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("Please read the following text aloud:")
+
+    #change to 'en_EN' to get English sample
+    fake = Faker('ru_RU')
+
+    print()
+    print(fake.text())
+    print(fake.text())
+    print(fake.text())
+    print(fake.text())
+    print()
+
+    sleep(1.5)
+    print(f"recording")
+
+    sleep(3)
+
     frames = []
     for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
         data = stream.read(CHUNK)
