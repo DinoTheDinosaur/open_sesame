@@ -5,9 +5,12 @@ import numpy as np
 
 from python_speech_features import mfcc
 import scipy.io.wavfile as wav
+from scipy import spatial
+from scipy.io import wavfile
 
 from sklearn.mixture import GaussianMixture
 from sklearn import preprocessing
+from keras.models import load_model
 
 # all classes take mfcc of audio as argument in fit()
 # all classes take mfcc as argument in predict()
@@ -102,7 +105,7 @@ class Voice_Profile:
 		
 	def predict(self, mfcc_of_voice):
 		current_error = self._score(mfcc_of_voice)
-
+		
 		with open("Voice_Profiles.pickle", 'rb') as f:
 			voice_profiles = pickle.load(f)
 			for user in voice_profiles["Simple"]:
@@ -118,12 +121,50 @@ class Voice_Profile:
 
 		print("Yes")
 		
-class CNN_Voice_Profile:
-	def fit(self, voices):
-		pass
-	def predict(self, voice):
-		pass
+def wav_to_mfcc(filepath):
+    rate, sig = wavfile.read(filepath)
+    X = np.array(mfcc(sig, rate))
+    a, b = X.shape
+    X = X.reshape(1, a, b, 1)
+    return X
 
+def mfcc_to_3_mfcc(mfcc):
+    mfcc1 = mfcc[:389]
+    mfcc2 = mfcc[390:779]
+    mfcc3 = mfcc[780:1169]
+    result = [mfcc1, mfcc2, mfcc3]
+    return result
+
+
+class CNN_Voice_Profile:
+    def __init__(self):
+        self.vector = np.random.randint(0, 1, (1, 161)).astype(np.float_)
+
+    def fit(self, voices):
+        model_path = '../Model.h5'
+        model = load_model(model_path)
+
+        for i in mfcc_to_3_mfcc(voices):
+            a, b = i.shape
+            i = i.reshape(1, a, b, 1)
+            Xnew = np.array(i)
+            ynew = model.predict(Xnew)
+            self.vector += ynew
+
+    def predict(self, voice):
+        model_path = '../Model.h5'
+        model = load_model(model_path)
+        # voice = voice[:389]
+        a,b = voice.shape
+        voice = voice.reshape(1,a,b,1)
+        Xnew = np.array(voice)
+        ynew = model.predict(Xnew)
+        if (1 - spatial.distance.cosine(ynew, self.vector)) > 0.55:
+            print("Yes")
+        else:
+            print("No")
+        print(1 - spatial.distance.cosine(ynew, self.vector))
+        
 
 def create_empty_pickle():
 	data = {"Simple": {}, "GMM": {}, "CNN": {}}
@@ -141,8 +182,8 @@ def add_user(nickname, mfcc_of_voice):
 		profiles.get("GMM")[nickname] = GMM_Voice_Profile(nickname)
 		profiles.get("GMM")[nickname].fit(mfcc_of_voice)
 		
-		# profiles.get("CNN")[nickname] = GMM_Voice_Profile(nickname)
-		# profiles.get("CNN")[nickname].fit(mfcc_of_voice)
+		profiles.get("CNN")[nickname] = CNN_Voice_Profile()
+		profiles.get("CNN")[nickname].fit(mfcc_of_voice)
 
 	with open('Voice_Profiles.pickle', 'wb') as f:
 		pickle.dump(profiles, f)
@@ -159,7 +200,7 @@ def user_exist(nickname):
 def print_user_list():
 	with open('Voice_Profiles.pickle', 'rb') as f:
 		profiles = pickle.load(f)
-		print(profiles.get("GMM").keys())
+		print(profiles.get("Simple").keys())
 
 # take nickname and voice, return predictions
 def authorization(nickname, mfcc_of_voice):
@@ -169,5 +210,5 @@ def authorization(nickname, mfcc_of_voice):
 		profiles.get("Simple")[nickname].predict(mfcc_of_voice)
 
 		profiles.get("GMM")[nickname].predict(mfcc_of_voice)
-		
-# profiles.get("CNN")[nickname].predict(mfcc_of_voice)
+	
+		profiles.get("CNN")[nickname].predict(mfcc_of_voice)

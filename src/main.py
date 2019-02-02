@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 time_reg = 12
-time_sign = 3.8
+time_sign = 3.95
 
 os.system('cls' if os.name == 'nt' else 'clear')
 
