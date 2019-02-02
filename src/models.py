@@ -69,7 +69,7 @@ class GMM_Voice_Profile:
 		mfcc_of_voice = preprocessing.scale(mfcc_of_voice)
 		current_proba = self.__default_error/self.__gmm.score(mfcc_of_voice)
 
-		with open("Voice_Profiles.pickle", 'rb') as f:
+		with open("../models/Voice_Profiles.pickle", 'rb') as f:
 			voice_profiles = pickle.load(f)
 			for user in voice_profiles["GMM"]:
 				user_GMM = voice_profiles["GMM"].get(user)
@@ -79,10 +79,11 @@ class GMM_Voice_Profile:
 
 				proba = self.__default_error/user_GMM._score(mfcc_of_voice)
 				if proba > current_proba:
-					print("No")
-					return
+					# print("No")
+					return 0
 
-		print("Yes")
+		# print("Yes")
+		return 1
 
 class Voice_Profile:
 	__mean_features = list()
@@ -106,7 +107,7 @@ class Voice_Profile:
 	def predict(self, mfcc_of_voice):
 		current_error = self._score(mfcc_of_voice)
 		
-		with open("Voice_Profiles.pickle", 'rb') as f:
+		with open("../models/Voice_Profiles.pickle", 'rb') as f:
 			voice_profiles = pickle.load(f)
 			for user in voice_profiles["Simple"]:
 				user_Simple = voice_profiles["Simple"].get(user)
@@ -116,10 +117,11 @@ class Voice_Profile:
 
 				error = user_Simple._score(mfcc_of_voice)
 				if error < current_error:
-					print("No")
-					return
+					# print("No")
+					return 0
 
-		print("Yes")
+		# print("Yes")
+		return 1
 		
 def wav_to_mfcc(filepath):
     rate, sig = wavfile.read(filepath)
@@ -141,7 +143,7 @@ class CNN_Voice_Profile:
         self.vector = np.random.randint(0, 1, (1, 161)).astype(np.float_)
 
     def fit(self, voices):
-        model_path = '../Model.h5'
+        model_path = '../models/Model.h5'
         model = load_model(model_path)
 
         for i in mfcc_to_3_mfcc(voices):
@@ -152,7 +154,7 @@ class CNN_Voice_Profile:
             self.vector += ynew
 
     def predict(self, voice):
-        model_path = '../Model.h5'
+        model_path = '../models/Model.h5'
         model = load_model(model_path)
         # voice = voice[:389]
         a,b = voice.shape
@@ -160,20 +162,23 @@ class CNN_Voice_Profile:
         Xnew = np.array(voice)
         ynew = model.predict(Xnew)
         if (1 - spatial.distance.cosine(ynew, self.vector)) > 0.55:
-            print("Yes")
+        	# print(1 - spatial.distance.cosine(ynew, self.vector))
+            # print("Yes")
+            return 1
         else:
-            print("No")
-        print(1 - spatial.distance.cosine(ynew, self.vector))
+            # print("No")
+            # print(1 - spatial.distance.cosine(ynew, self.vector))
+            return 0
         
 
 def create_empty_pickle():
 	data = {"Simple": {}, "GMM": {}, "CNN": {}}
-	with open('Voice_Profiles.pickle', 'wb') as f:
+	with open('../models/Voice_Profiles.pickle', 'wb') as f:
 		pickle.dump(data, f)
 
 # take nickname and mfcc of voice, create profiles in pickle
 def add_user(nickname, mfcc_of_voice):
-	with open('Voice_Profiles.pickle', 'rb') as f:
+	with open('../models/Voice_Profiles.pickle', 'rb') as f:
 		profiles = pickle.load(f)
 
 		profiles.get("Simple")[nickname] = Voice_Profile(nickname)
@@ -185,12 +190,12 @@ def add_user(nickname, mfcc_of_voice):
 		profiles.get("CNN")[nickname] = CNN_Voice_Profile()
 		profiles.get("CNN")[nickname].fit(mfcc_of_voice)
 
-	with open('Voice_Profiles.pickle', 'wb') as f:
+	with open('../models/Voice_Profiles.pickle', 'wb') as f:
 		pickle.dump(profiles, f)
 
 # return true if user exist in pickle
 def user_exist(nickname):
-	with open('Voice_Profiles.pickle', 'rb') as f:
+	with open('../models/Voice_Profiles.pickle', 'rb') as f:
 		profiles = pickle.load(f)
 		if nickname not in profiles.get("Simple") and nickname not in profiles.get("GMM") and nickname not in profiles.get("CNN"):
 			return False
@@ -198,17 +203,21 @@ def user_exist(nickname):
 			return True
 
 def print_user_list():
-	with open('Voice_Profiles.pickle', 'rb') as f:
+	with open('../models/Voice_Profiles.pickle', 'rb') as f:
 		profiles = pickle.load(f)
 		print(profiles.get("Simple").keys())
 
 # take nickname and voice, return predictions
 def authorization(nickname, mfcc_of_voice):
-	with open('Voice_Profiles.pickle', 'rb') as f:
+	with open('../models/Voice_Profiles.pickle', 'rb') as f:
 		profiles = pickle.load(f)
+		answer = 0
 
-		profiles.get("Simple")[nickname].predict(mfcc_of_voice)
+		answer +=profiles.get("Simple")[nickname].predict(mfcc_of_voice)
+		answer +=profiles.get("GMM")[nickname].predict(mfcc_of_voice)
+		answer +=profiles.get("CNN")[nickname].predict(mfcc_of_voice)
 
-		profiles.get("GMM")[nickname].predict(mfcc_of_voice)
-	
-		profiles.get("CNN")[nickname].predict(mfcc_of_voice)
+		if answer >=2:
+			return True
+		else:
+			return False	
