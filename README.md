@@ -1,18 +1,35 @@
-# Biometric verification of a person by voice (Open Sesame).
+# Open Sesame (Biometric verification of a person by voice ).
+
 
 A Python module for speech authentification.
+
 The solution of this problem can find application safety of access to physical objects, information and financial resources. The important case of identification consist in definition of whether two signals belong to a voice of the same speaker. At verification the user shows the identifier in this or that look and the system of recognition should confirm or reject this identifier.
 
 # Installing
 
-To install this project on your local computer, you should copy the repository and modules listed in requirements.txt. If you do not have them, run in Terminal: 
+You should have Python3.6-3.7 and Linux installed on your machine.
 
+To install this project on your machine, you should download zip or execute the following commands in the terminal:
+```sh
+git clone https://github.com/DinoTheDinosaur/open_sesame.git\
+```
+You should also use the modules listed in the requirements.txt file. If you do not have them, run in the Terminal:
 ```sh
 pip install -r requirements.txt
 ```
 
 # Basic Usage
 
+At first the program asks whether the user has an account. If there is no account, then it is offered to create it, having entered the Username and having recorded a voice which characteristics will be saved in the database. If the account exists, three attempts to log in by means of voice authentication are provided to the user.
+
+Go to open_sesame/src directory:
+```sh
+cd open_sesame/src
+```
+Run main.py:
+```sh
+python main.py
+```
 # Contributors
 
 - Zorkin Alexandr 
@@ -34,7 +51,7 @@ pip install -r requirements.txt
 4. https://www.python.org/downloads/ -Download Python.
 5. http://practicalcryptography.com/miscellaneous/machine-learning/guide-mel-frequency-cepstral-coefficients-mfccs/ - Mel Frequency Cepstral Coefficient (MFCC) tutorial.
 
-# Licence
+# License
 
 Copyright © 2019 Zorkin Alexander, Baryshev Kirill, Murtazin Emil, Popov Daniel, Shalgynov Evgeny, Radnaev Tumen, Kandryukov Mikhail, Burdukovskaya Galina, Shelest Andrey, Selezneva Darya
 
