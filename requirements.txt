@@ -1,0 +1,8 @@
+wave
+pyaudio
+numpy
+python_speech_features
+keras
+sklearn
+scipy
+faker
