@@ -17,49 +17,62 @@ print("    A Python module for speech authentification")
 
 print('\n\n')
 print("Welcome to great service, dear friend!")
-print("Have you got an account?   1  = YES, 0 = NO  ")
 
-ans = input()
+ans = None
 
-if ans == '1':
-    print ("What is your name?")
-    username = input()
-    if not user_exist(username):
-        print ("Your nickname is not found :(")
-    else:
-        for i in range(3):
-            print ("Tap enter to record your voice")
-            input()
+while(ans != '2'):
+    print("Have you got an account?   1  = YES, 0 = NO, 2 = EXIT ")
+    ans = input()
 
-            sound = VR(time_sign)
-            print("done")
-            if authorization(username, sound):
-                os.system('cls' if os.name == 'nt' else 'clear')
-                print("You are in system! Welcome.")
-                break
-            else:
-                os.system('cls' if os.name == 'nt' else 'clear')
-                print("Try again")
-                sleep(2)
+    if ans == '1':
+        print("What is your name?")
+        username = input()
+        if not user_exist(username):
+            print("Your nickname is not found :(")
+            print("0 = create account, 1 = try again, 2 = exit ")
+            ans = input()
         else:
-            print("Permission denied")
-            
-        # print("Logged in")
-        # img = Image.open("/home/somnoynadno/Pictures/gunter-adventure-time-at.jpg")
-        # img.show()
+            for i in range(3):
+                print("Tap enter to record your voice")
+                input()
 
-elif ans == '0':
-    print ("What's your name?")
-    username = input()
+                sound = VR(time_sign)
+                print("done")
+                if authorization(username, sound):
+                    os.system('cls' if os.name == 'nt' else 'clear')
+                    print("You are in system! Welcome.")
+                    ans = '2'
+                    break
+                else:
+                    os.system('cls' if os.name == 'nt' else 'clear')
+                    print("Try again")
+                    sleep(2)
+            else:
+                print("Permission denied")
+                break
 
-    print ("Tap enter to record your voice")
-    input()
+            # print("Logged in")
+            # img = Image.open("/home/somnoynadno/Pictures/gunter-adventure-time-at.jpg")
+            # img.show()
 
-    sound = VR(time_reg)
+    elif ans == '0':
+        print("What's your name?")
+        username = input()
 
-    add_user(username, sound)
-    print("New account created!")
-    print("Your username to log in:", username)
+        if user_exist(username):
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print("Sorry, this user already exist")
+            continue
+
+        print("Tap enter to record your voice")
+        input()
+
+        sound = VR(time_reg)
+
+        add_user(username, sound)
+        print("New account created!")
+        print("Your username to log in:", username)
+        break
 
 sleep(0.5)
 print("exiting...")
