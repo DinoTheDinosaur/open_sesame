@@ -29,7 +29,6 @@ while(ans != '2'):
         username = input()
         if not user_exist(username):
             print("Your nickname is not found :(")
-            print("0 = create account, 1 = try again, 2 = exit ")
             ans = input()
         else:
             for i in range(3):
@@ -42,9 +41,9 @@ while(ans != '2'):
                     os.system('cls' if os.name == 'nt' else 'clear')
                     print("You are in system! Welcome.")
                     ans = '2'
-                    sleep(2)
+                    sleep(1)
                     print("Here is your file:")
-                    sleep(2)
+                    sleep(1)
                     dnev()
                     break
                 else:
@@ -77,4 +76,3 @@ while(ans != '2'):
 sleep(0.5)
 print("exiting...")
 sleep(1.5)
-print_user_list()

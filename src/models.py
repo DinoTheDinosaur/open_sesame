@@ -67,8 +67,6 @@ class GMM_Voice_Profile:
 		mfcc_of_voice = preprocessing.scale(mfcc_of_voice)
 		current_proba = self.__default_error/self.__gmm.score(mfcc_of_voice)
 
-		print(current_proba)
-
 		with open("../models/Voice_Profiles.pickle", 'rb') as f:
 			voice_profiles = pickle.load(f)
 			for user in voice_profiles["GMM"]:
@@ -79,10 +77,7 @@ class GMM_Voice_Profile:
 
 				proba = self.__default_error/user_GMM._score(mfcc_of_voice)
 				if proba > current_proba:
-					print("No")
 					return 0
-
-		print("Yes")
 		return 1
 
 class Voice_Profile:
@@ -107,8 +102,6 @@ class Voice_Profile:
 	def predict(self, mfcc_of_voice):
 		current_error = self._score(mfcc_of_voice)
 
-		print(current_error)
-
 		with open("../models/Voice_Profiles.pickle", 'rb') as f:
 			voice_profiles = pickle.load(f)
 			for user in voice_profiles["Simple"]:
@@ -119,10 +112,7 @@ class Voice_Profile:
 
 				error = user_Simple._score(mfcc_of_voice)
 				if error < current_error:
-					print("No")
 					return 0
-
-		print("Yes")
 		return 1
 		
 def wav_to_mfcc(filepath):
@@ -169,17 +159,10 @@ class CNN_Voice_Profile:
         Xnew = np.array(voice)
         ynew = model.predict(Xnew)
         if (1 - spatial.distance.cosine(ynew, self.vector)) > 0.55:
-        	print(1 - spatial.distance.cosine(ynew, self.vector))
-        	print("Yes")
-        	
         	return 1
         else:
-        	print(1 - spatial.distance.cosine(ynew, self.vector))
-        	print("No")
-        	
         	return 0
         
-
 def create_empty_pickle():
 	data = {"Simple": {}, "GMM": {}, "CNN": {}}
 	with open('../models/Voice_Profiles.pickle', 'wb') as f:
@@ -226,7 +209,7 @@ def authorization(nickname, mfcc_of_voice):
 		answer +=profiles.get("GMM")[nickname].predict(mfcc_of_voice)
 		answer +=profiles.get("CNN")[nickname].predict(mfcc_of_voice)
 
-		if answer >=2:
+		if answer >= 2:
 			return True
 		else:
 			return False	
