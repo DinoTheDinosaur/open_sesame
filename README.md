@@ -1,7 +1,7 @@
-# Open Sesame (Biometric verification of a person by voice ).
+# Open Sesame
 
 
-A Python module for speech authentification.
+A Python module for biometric verification of a person by voice.
 
 The solution of this problem can find application safety of access to physical objects, information and financial resources. The important case of identification consist in definition of whether two signals belong to a voice of the same speaker. At verification the user shows the identifier in this or that look and the system of recognition should confirm or reject this identifier.
 
@@ -30,6 +30,27 @@ Run main.py:
 ```sh
 python main.py
 ```
+If the program works correctly, then on the screen the message will appear:
+```sh
+---Open SESAME---
+A Python module for speech authentification
+
+```
+Further the program will ask you: for the first time you use this program or you already have an account:
+```sh
+Have you got an account?
+```
+If there is no account, you will be offered to create it: you will need to pronounce randomly generated text within twelve seconds.
+
+If you already have an account, you will be offered to read aloud randomly generated text within four seconds. The program will give confirmation of an entrance to the account:
+```sh
+Accepted
+```
+3 attempts are given to the user to try to log in. If the user failed to log in after the 3rd attempt, then the program will display the message:
+```sh
+Permission denied!
+```
+
 # Contributors
 
 - Zorkin Alexandr 
