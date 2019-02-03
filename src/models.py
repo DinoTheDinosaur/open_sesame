@@ -1,6 +1,4 @@
 import pickle
-
-import matplotlib.pyplot as plt
 import numpy as np
 
 from python_speech_features import mfcc
@@ -16,7 +14,7 @@ from keras.models import load_model
 # all classes take mfcc as argument in predict()
 
 # all classes return dump of profile in fit()
-# all classes return probability in predict()
+# all classes return bool in predict()
 
 # take mfcc, return list of 13 features on time averaging
 def mfcc2features(mfcc):
@@ -69,6 +67,8 @@ class GMM_Voice_Profile:
 		mfcc_of_voice = preprocessing.scale(mfcc_of_voice)
 		current_proba = self.__default_error/self.__gmm.score(mfcc_of_voice)
 
+		print(current_proba)
+
 		with open("../models/Voice_Profiles.pickle", 'rb') as f:
 			voice_profiles = pickle.load(f)
 			for user in voice_profiles["GMM"]:
@@ -79,10 +79,10 @@ class GMM_Voice_Profile:
 
 				proba = self.__default_error/user_GMM._score(mfcc_of_voice)
 				if proba > current_proba:
-					# print("No")
+					print("No")
 					return 0
 
-		# print("Yes")
+		print("Yes")
 		return 1
 
 class Voice_Profile:
@@ -106,7 +106,9 @@ class Voice_Profile:
 		
 	def predict(self, mfcc_of_voice):
 		current_error = self._score(mfcc_of_voice)
-		
+
+		print(current_error)
+
 		with open("../models/Voice_Profiles.pickle", 'rb') as f:
 			voice_profiles = pickle.load(f)
 			for user in voice_profiles["Simple"]:
@@ -117,10 +119,10 @@ class Voice_Profile:
 
 				error = user_Simple._score(mfcc_of_voice)
 				if error < current_error:
-					# print("No")
+					print("No")
 					return 0
 
-		# print("Yes")
+		print("Yes")
 		return 1
 		
 def wav_to_mfcc(filepath):
@@ -131,16 +133,20 @@ def wav_to_mfcc(filepath):
     return X
 
 def mfcc_to_3_mfcc(mfcc):
-    mfcc1 = mfcc[:389]
-    mfcc2 = mfcc[390:779]
-    mfcc3 = mfcc[780:1169]
+	# for old model:
+    # mfcc1 = mfcc[:389]
+    # mfcc2 = mfcc[390:779]
+    # mfcc3 = mfcc[780:1169]
+    mfcc1 = mfcc[:379]
+    mfcc2 = mfcc[380:759]
+    mfcc3 = mfcc[760:1139]
     result = [mfcc1, mfcc2, mfcc3]
     return result
 
 
 class CNN_Voice_Profile:
     def __init__(self):
-        self.vector = np.random.randint(0, 1, (1, 161)).astype(np.float_)
+        self.vector = np.random.randint(0, 1, (1, 1000)).astype(np.float_)
 
     def fit(self, voices):
         model_path = '../models/Model.h5'
@@ -156,19 +162,22 @@ class CNN_Voice_Profile:
     def predict(self, voice):
         model_path = '../models/Model.h5'
         model = load_model(model_path)
-        # voice = voice[:389]
+        # for new model:
+        voice = voice[:379]
         a,b = voice.shape
         voice = voice.reshape(1,a,b,1)
         Xnew = np.array(voice)
         ynew = model.predict(Xnew)
         if (1 - spatial.distance.cosine(ynew, self.vector)) > 0.55:
-        	# print(1 - spatial.distance.cosine(ynew, self.vector))
-            # print("Yes")
-            return 1
+        	print(1 - spatial.distance.cosine(ynew, self.vector))
+        	print("Yes")
+        	
+        	return 1
         else:
-            # print("No")
-            # print(1 - spatial.distance.cosine(ynew, self.vector))
-            return 0
+        	print(1 - spatial.distance.cosine(ynew, self.vector))
+        	print("No")
+        	
+        	return 0
         
 
 def create_empty_pickle():

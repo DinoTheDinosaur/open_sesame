@@ -27,8 +27,8 @@ def voice_rec(record_len):
     fake = Faker('ru_RU')
 
     print()
-    print(fake.text())
-    print(fake.text())
+    # print(fake.text())
+    # print(fake.text())
     print(fake.text())
     print(fake.text())
     print()
