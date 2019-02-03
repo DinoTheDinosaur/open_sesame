@@ -30,6 +30,25 @@ Run main.py:
 ```sh
 python main.py
 ```
+If the program works correctly, then on the screen the message will appear:
+```sh
+---Open SESAME---
+A Python module for speech authentification
+
+```
+Further the program will ask you: for the first time you use this program or you already have an account:
+```sh
+Have you got an account?
+```
+If you already have an account, it will be offered to you to write down accidentally generated text within four seconds. And the program will give the message about confirmation of an entrance to the account:
+```sh
+New account created!
+Your username to log in: Username
+```
+If there is no account, it will be offered to you to create it. For this purpose it will be offered to you to write down accidentally generated text within twelve seconds. Further to come into the account it is also necessary to say the text which will be issued by the program. For an entrance to the program 3 attempts of rewriting of the text are given. If it did not turn out to enter, then the program will give the message:
+```sh
+Permission denied!
+```
 # Contributors
 
 - Zorkin Alexandr 
