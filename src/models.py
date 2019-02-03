@@ -1,6 +1,4 @@
 import pickle
-
-import matplotlib.pyplot as plt
 import numpy as np
 
 from python_speech_features import mfcc
@@ -16,7 +14,7 @@ from keras.models import load_model
 # all classes take mfcc as argument in predict()
 
 # all classes return dump of profile in fit()
-# all classes return probability in predict()
+# all classes return bool in predict()
 
 # take mfcc, return list of 13 features on time averaging
 def mfcc2features(mfcc):
@@ -135,6 +133,7 @@ def wav_to_mfcc(filepath):
     return X
 
 def mfcc_to_3_mfcc(mfcc):
+	# for old model:
     # mfcc1 = mfcc[:389]
     # mfcc2 = mfcc[390:779]
     # mfcc3 = mfcc[780:1169]
@@ -163,6 +162,7 @@ class CNN_Voice_Profile:
     def predict(self, voice):
         model_path = '../models/Model.h5'
         model = load_model(model_path)
+        # for new model:
         voice = voice[:379]
         a,b = voice.shape
         voice = voice.reshape(1,a,b,1)

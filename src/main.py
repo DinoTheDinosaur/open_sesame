@@ -1,6 +1,6 @@
 from voice_recording import voice_rec as VR
-from PIL import Image
 from models import *
+from dnevnik import *
 import os
 from time import sleep
 
@@ -39,12 +39,16 @@ while(ans != '2'):
                 sound = VR(time_sign)
                 print("done")
                 if authorization(username, sound):
-                    # os.system('cls' if os.name == 'nt' else 'clear')
+                    os.system('cls' if os.name == 'nt' else 'clear')
                     print("You are in system! Welcome.")
                     ans = '2'
+                    sleep(2)
+                    print("Here is your file:")
+                    sleep(2)
+                    dnev()
                     break
                 else:
-                    # os.system('cls' if os.name == 'nt' else 'clear')
+                    os.system('cls' if os.name == 'nt' else 'clear')
                     print("Try again")
                     sleep(2)
             else:
