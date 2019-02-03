@@ -1,11 +1,11 @@
 from voice_recording import voice_rec as VR
-from PIL import Image
 from models import *
+from dnevnik import *
 import os
 from time import sleep
 
 time_reg = 12
-time_sign = 3.95
+time_sign = 4
 
 if not os.path.exists('../models/Voice_Profiles.pickle'):
     create_empty_pickle()
@@ -42,6 +42,10 @@ while(ans != '2'):
                     os.system('cls' if os.name == 'nt' else 'clear')
                     print("You are in system! Welcome.")
                     ans = '2'
+                    sleep(2)
+                    print("Here is your file:")
+                    sleep(2)
+                    dnev()
                     break
                 else:
                     os.system('cls' if os.name == 'nt' else 'clear')
@@ -50,10 +54,6 @@ while(ans != '2'):
             else:
                 print("Permission denied")
                 break
-
-            # print("Logged in")
-            # img = Image.open("/home/somnoynadno/Pictures/gunter-adventure-time-at.jpg")
-            # img.show()
 
     elif ans == '0':
         print("What's your name?")
@@ -77,4 +77,4 @@ while(ans != '2'):
 sleep(0.5)
 print("exiting...")
 sleep(1.5)
-
+print_user_list()
