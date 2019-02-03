@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 time_reg = 12
-time_sign = 3.95
+time_sign = 4
 
 if not os.path.exists('../models/Voice_Profiles.pickle'):
     create_empty_pickle()
@@ -39,21 +39,17 @@ while(ans != '2'):
                 sound = VR(time_sign)
                 print("done")
                 if authorization(username, sound):
-                    os.system('cls' if os.name == 'nt' else 'clear')
+                    # os.system('cls' if os.name == 'nt' else 'clear')
                     print("You are in system! Welcome.")
                     ans = '2'
                     break
                 else:
-                    os.system('cls' if os.name == 'nt' else 'clear')
+                    # os.system('cls' if os.name == 'nt' else 'clear')
                     print("Try again")
                     sleep(2)
             else:
                 print("Permission denied")
                 break
-
-            # print("Logged in")
-            # img = Image.open("/home/somnoynadno/Pictures/gunter-adventure-time-at.jpg")
-            # img.show()
 
     elif ans == '0':
         print("What's your name?")
@@ -77,4 +73,4 @@ while(ans != '2'):
 sleep(0.5)
 print("exiting...")
 sleep(1.5)
-
+print_user_list()
